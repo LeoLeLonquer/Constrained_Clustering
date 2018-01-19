@@ -47,7 +47,7 @@ def propagate(number_of_points, ml_cons, cl_cons):
 
     ml_groups, ml_labels = must_link_fusion(ml_cons)
     new_cl_cons = collections.defaultdict(set)
-    ordered_ml_groups = []
+    ordered_ml_groups = [] #index == label => set of points
     mapped_values = set({})
 
     # listing of ml_groups in range(0, len(ml_groups))
@@ -61,12 +61,14 @@ def propagate(number_of_points, ml_cons, cl_cons):
         if pt in mapped_values:
             pass
         else:
-            ordered_ml_groups.append(pt)
+            index += 1
+            ml_labels[pt] = index
+            ordered_ml_groups.append(set({pt}))
 
     # fusion of cl_cons
     for pt1, pt2 in cl_cons:
-        new_cl_cons[ml_labels.get(pt1, pt1)].add(ml_labels.get(pt2, pt2))
-        new_cl_cons[ml_labels.get(pt2, pt2)].add(ml_labels.get(pt1, pt1))
+        new_cl_cons[ml_labels[pt1]].add(ml_labels[pt2])
+        new_cl_cons[ml_labels[pt2]].add(ml_labels[pt1])
 
     return ordered_ml_groups, new_cl_cons
 

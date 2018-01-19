@@ -132,9 +132,9 @@ def model2():
                             ]
                                       # TODO to test that adding [1,-1]
                                       # still work when [1,-1] is in eq_cons
-
+        # TODO write a proper propagate for this pb
         ml_groups, cl_cons = propagate(n_samples, eq_constraints, noneq_constraints)
-        print(ml_groups, dict(cl_cons))
+        print( cl_cons)
 
         for pt1, pt2 in noneq_constraints:
             for k in range(Klusters):
@@ -144,39 +144,42 @@ def model2():
 
         sol = pb.solve()
 
-        xsol = np.array([sol.get_value(xvar) for xvar in x.flatten()]).reshape(n_samples, Klusters)
+        if sol == None:
+            print("No solution found")
+        else:
+            xsol = np.array([sol.get_value(xvar) for xvar in x.flatten()]).reshape(n_samples, Klusters)
 
-        # for cons in new_cons:
-            # print("=========")
-            # for pt in cons:
-                # print(xsol[pt,:])
+            # for cons in new_cons:
+                # print("=========")
+                # for pt in cons:
+                    # print(xsol[pt,:])
 
-        for k in range(Klusters):
-            xmask = xsol[:,k]==1
-            Xprime = X[xmask]
-            plt.plot(Xprime[:,0], Xprime[:,1], 'x')
+            for k in range(Klusters):
+                xmask = xsol[:,k]==1
+                Xprime = X[xmask]
+                plt.plot(Xprime[:,0], Xprime[:,1], 'x')
 
-        # Plotting the constraints
-        # Plotting the equality constraints
-        for cons in new_cons:
-            new_X_x = []
-            new_X_y = []
-            for pt in cons :
-                new_X_x.append(X[pt, 0])
-                new_X_y.append(X[pt, 1])
+            # Plotting the constraints
+            # Plotting the equality constraints
+            for cons in new_cons:
+                new_X_x = []
+                new_X_y = []
+                for pt in cons :
+                    new_X_x.append(X[pt, 0])
+                    new_X_y.append(X[pt, 1])
 
-            plt.plot(new_X_x,new_X_y,
-                     '^', linewidth=50)
+                plt.plot(new_X_x,new_X_y,
+                         '^', linewidth=50)
 
-        # for pt1, pt2 in eq_constraints:
-            # plt.plot([X[pt1,0],X[pt2,0]],
-                     # [X[pt1,1],X[pt2,1]],
-                     # 'x', linewidth=50)
+            # for pt1, pt2 in eq_constraints:
+                # plt.plot([X[pt1,0],X[pt2,0]],
+                         # [X[pt1,1],X[pt2,1]],
+                         # 'x', linewidth=50)
 
-        for pt1, pt2 in noneq_constraints:
-            plt.plot([X[pt1,0],X[pt2,0]],
-                     [X[pt1,1],X[pt2,1]],
-                     'v', linewidth=50)
-        plt.show()
+            for pt1, pt2 in noneq_constraints:
+                plt.plot([X[pt1,0],X[pt2,0]],
+                         [X[pt1,1],X[pt2,1]],
+                         'v', linewidth=50)
+            plt.show()
 
 model2()
