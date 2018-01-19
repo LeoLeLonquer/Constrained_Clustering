@@ -8,6 +8,7 @@ from sklearn.metrics.pairwise import pairwise_distances
 import matplotlib.pyplot as plt
 import collections
 from itertools import combinations
+from propagation import propagate
 
 # HERE WE ARE GONNA TRY TO MINIMIZE THE MAXIMUM DIAMETER BETWEEN CLUSTERS
 
@@ -91,6 +92,7 @@ def model2():
         maxD = pb.integer_var()
         pb.add_constraints([sum(xl) == 1 for xl in x])
 
+        # add the sum of column must be sup or equal to 1
         for i in range(n_samples):
             for j in range(n_samples):
                 for k in range(Klusters):
@@ -105,12 +107,12 @@ def model2():
         # Or to add constraints
         # Or to do nothing ?
         eq_constraints = []
-        eq_constraints = [[1,-1],
-                          [1,3],
-                          [3,2],
-                          [4,-3],
-                          [4,6],
-                          [7,8],
+        eq_constraints = [(1,-1),
+                          (1,3),
+                          (3,2),
+                          (4,-3),
+                          (4,6),
+                          (7,8),
                           ]
 
         new_cons = cons_linking(eq_constraints)
@@ -124,12 +126,19 @@ def model2():
                 # pb.add_constraint(x[pt1,k]==x[pt2,k])
 
         noneq_constraints = []
-        # noneq_constraints = [[4,-2],
-                            # ]
-                                      # strange that adding [1,-1]
+        noneq_constraints = [(51, 50),
+                             (51, 30),
+                             (3, 11)
+                            ]
+                                      # TODO to test that adding [1,-1]
                                       # still work when [1,-1] is in eq_cons
+
+        ml_groups, cl_cons = propagate(n_samples, eq_constraints, noneq_constraints)
+        print(ml_groups, dict(cl_cons))
+
         for pt1, pt2 in noneq_constraints:
-            pb.add_constraint(str(x[pt1,:])!=str(x[pt2,:]))
+            for k in range(Klusters):
+                pb.add_constraint((x[pt1,k] and x[pt2,k]) == 0)
 
         pb.set_objective('min', maxD)
 
