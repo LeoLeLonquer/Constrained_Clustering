@@ -46,12 +46,14 @@ def propagate(number_of_points, ml_cons, cl_cons):
     cl_cons = clean(number_of_points, cl_cons)
 
     ml_groups, ml_labels = must_link_fusion(ml_cons)
-    new_cl_cons = collections.defaultdict(set)
+    new_cl_cons = collections.defaultdict(set) # label => set of labels
     ordered_ml_groups = [] #index == label => set of points
-    mapped_values = set({})
+    mapped_values = set({}) # values in ml_groups
 
     # listing of ml_groups in range(0, len(ml_groups))
+    label_nb = 0
     for index, values in enumerate(ml_groups.values()):
+        label_nb =+ 1
         ordered_ml_groups.append(values)
         mapped_values.update(values)
         for pt in values:
@@ -61,8 +63,8 @@ def propagate(number_of_points, ml_cons, cl_cons):
         if pt in mapped_values:
             pass
         else:
-            index += 1
-            ml_labels[pt] = index
+            label_nb =+ 1 # the index that in used in precedent for loop
+            ml_labels[pt] = label_nb 
             ordered_ml_groups.append(set({pt}))
 
     # fusion of cl_cons
