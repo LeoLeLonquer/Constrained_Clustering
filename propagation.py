@@ -31,7 +31,7 @@ def must_link_fusion(cons, out_type=None):
 def clean(n_points, cons):
     """ converts link btw 1 and -1 to 1 and n_points-1"""
     cons_to_modify = filter(lambda pts: pts[0] < 0 or pts[1] < 0, cons)
-    new_cons = list(filter(lambda pts: pts[0] > 0 and pts[1] > 0, cons))
+    new_cons = list(filter(lambda pts: pts[0] >= 0 and pts[1] >= 0, cons))
 
     for pt1, pt2 in cons_to_modify:
         if pt1 < 0:
@@ -53,7 +53,7 @@ def propagate(number_of_points, ml_cons, cl_cons):
     # listing of ml_groups in range(0, len(ml_groups))
     label_nb = 0
     for index, values in enumerate(ml_groups.values()):
-        label_nb =+ 1
+        label_nb = label_nb + 1
         ordered_ml_groups.append(values)
         mapped_values.update(values)
         for pt in values:
@@ -63,8 +63,8 @@ def propagate(number_of_points, ml_cons, cl_cons):
         if pt in mapped_values:
             pass
         else:
-            label_nb =+ 1 # the index that in used in precedent for loop
-            ml_labels[pt] = label_nb 
+            label_nb = label_nb + 1
+            ml_labels[pt] = label_nb
             ordered_ml_groups.append(set({pt}))
 
     # fusion of cl_cons

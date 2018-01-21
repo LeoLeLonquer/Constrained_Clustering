@@ -129,8 +129,8 @@ def model2():
 
         # TODO write a proper propagate for this pb
         # ml_groups, cl_cons = propagate(n_samples, eq_constraints, noneq_constraints)
-
-        for pt1, pt2 in noneq_constraints:
+ 
+       for pt1, pt2 in noneq_constraints:
             for k in range(Klusters):
                 pb.add_constraint((x[pt1,k] + x[pt2,k]) <= 1)
 
