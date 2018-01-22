@@ -13,7 +13,7 @@ import time
 from cop_kmeans import run_cop_kmeans,get_score
 from pb_generation import create_pb
 from  sklearn.datasets import make_moons, make_blobs
-#from Deap_GA import call_GA
+from Deap_GA import call_GA
 
 
 def k_means(data,ml,cl,k):
@@ -40,7 +40,7 @@ cl.append(pb[2])
 
 
 k=5
-function = [run_cop_kmeans,PLNE,CSP,ge]
+function = [run_cop_kmeans,PLNE,CSP,call_GA]
 def run():
     pas_data=len(data)
     pas_contrainte=len(ml)
