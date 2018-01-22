@@ -5,16 +5,13 @@ import pickle
 from inspect import currentframe, getframeinfo
 from pathlib import Path
 
-
-datasize = 100
-
 #####  LECTURE/ECRITURE DANS LES FICHIERS/ GENERATION DE DONNEES #####
 
 # on obtient le nom du répertoire courant
 fich_courant = getframeinfo(currentframe()).filename
 rep_courant = Path(fich_courant).resolve().parent
 
-def creer_donnees() :
+def creer_donnees(datasize=100) :
 
     dat = {}
     dat["2blobs"] = {}
