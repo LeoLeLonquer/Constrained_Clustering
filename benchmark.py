@@ -15,11 +15,11 @@ from pb_generation import create_pb
 from  sklearn.datasets import make_moons, make_blobs
 from Deap_GA import call_GA
 
-from maxD import model2
+from maxD import PLNE
 
 def k_means(data,ml,cl,k):
     return 1,[]
-def PLNE(data,ml,cl,k) :
+def PLNE_g(data,ml,cl,k) :
     return 1,[]
 def CSP(data,ml,cl,k):
     return 1,[]
@@ -53,8 +53,12 @@ def run():
             test_ml =ml[t_con]
             test_cl =cl[t_con]
             for i in range(len(function)):
+                print("==============================")
+                print(function[i])
                 t,label=function[i](test_data,test_ml,test_cl,k)
                 score = get_score(test_data,label,k)
+                print("temps : {}".format(t))
+                print("score : {}".format(score))
 #                 print(t)
                 res[t_data][t_con][i]=[t,score]
     return res
