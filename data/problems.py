@@ -4,6 +4,9 @@ import numpy as np
 import pickle
 from inspect import currentframe, getframeinfo
 from pathlib import Path
+from sklearn import datasets
+import math
+import random
 
 #####  LECTURE/ECRITURE DANS LES FICHIERS/ GENERATION DE DONNEES #####
 
@@ -43,7 +46,36 @@ def lecture(nom_fichier):
         dat = depick.load()
     return dat
 
+def creer_contraintes (label, pourcent) :
+    mustlink = []
+    cannotlink = []
+    nb_points = 0
+    
+    # calcul du nombre de points à contraindre
+    if (0 < pourcent) and (pourcent <= 1) :    
+        nb_points = math.floor(pourcent * len(label))
+        # il faut un nombre pair de points, ils vont deux par deux
+        if (nb_points % 2 == 1) :
+            nb_points = nb_points - 1
+    
+    # les indices des points contraints
+    echantillon = random.sample(range(1, len(label)), nb_points)
+
+    # division en deux groupes d'echantillon
+    milieu = int(len(echantillon)/2)
+    half_1 = echantillon[:milieu]
+    half_2 = echantillon[milieu:]
+    # creation contraintes
+    for i in range(milieu) :
+        if (label[half_1[i]] == label[half_2[i]]) :
+            mustlink.append((half_1[i],half_2[i]))
+        else :
+            cannotlink.append((half_1[i],half_2[i]))
+
+    return mustlink, cannotlink
+
 dat = creer_donnees()
 ecriture(dat,"data.dat")
 data_lu = lecture("data.dat")
 data = data_lu["2moons"]["data"]
+ml,cl = creer_contraintes(data_lu["2moons"]["labels"], 0.20)
