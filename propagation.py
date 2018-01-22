@@ -42,6 +42,7 @@ def clean(n_points, cons):
     return new_cons
 
 def propagate(number_of_points, ml_cons, cl_cons):
+
     ml_cons = clean(number_of_points, ml_cons)
     cl_cons = clean(number_of_points, cl_cons)
 
@@ -51,7 +52,7 @@ def propagate(number_of_points, ml_cons, cl_cons):
     mapped_values = set({}) # values in ml_groups
 
     # listing of ml_groups in range(0, len(ml_groups))
-    label_nb = 0
+    label_nb = -1
     for index, values in enumerate(ml_groups.values()):
         label_nb = label_nb + 1
         ordered_ml_groups.append(values)
