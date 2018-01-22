@@ -4,6 +4,7 @@ import numpy as np
 import pickle
 from inspect import currentframe, getframeinfo
 from pathlib import Path
+from sklearn import datasets
 
 
 datasize = 100
