@@ -169,34 +169,3 @@ def call_GA(data,ml_cons=[],cl_cons=[],nb_cluster=3):
         for j in Dico_fortement_connexe[i]:
             colors[j]=chicken_dinner[i]
     return colors,chicken_dinner.fitness,tfin
-
-
-
-
-#PREPROCESSING
-#Data ( import real data for bechmark)
-datasize = 100
-data = datasets.make_blobs(n_samples=datasize, centers= 3 ,random_state=8)[0]
-
-Dists = pairwise_distances(data)
-ml_cons=[(1,2),(13,11),(11,22)]
-cl_cons=[(1,7),(12,29),(17,20)]
-#ml_cons=[]
-#cl_cons=[]
-
-colors,best_score,tt = call_GA(data,ml_cons,cl_cons,3)
-
-plt.figure()
-plt.title("Attribution, score {} | temps {}".format(best_score,tt))
-plt.scatter(data[:,0], data[:,1], c = colors)
-#blocks process
-plt.draw()
-
-plt.show()
-
-
-
-#TODOS
-#Integrate benchmark data
-# Add second score
-#test stuff
