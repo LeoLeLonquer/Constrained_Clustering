@@ -55,7 +55,7 @@ def call_GA(data,nb_cluster=3,ml_cons=[],cl_cons=[]):
                     dist = Dists[i][j]
                     if dist > D:
                         D = dist
-
+                """
                 #check in other set for Inter cluster dist
                 for k2 in range(1,nb_cluster+1):
                     if k2 != k:
@@ -65,12 +65,12 @@ def call_GA(data,nb_cluster=3,ml_cons=[],cl_cons=[]):
                             if S == None or dist < S:
                                 S = dist
                             Total += dist
-
+                """
 
         #Penality factor ( for minimizing).
         malus = (1+nb_broken_rules(individual))
         #return D * malus,Total / malus,
-        return D * malus,S,
+        return D * malus,0,
 
 
     #toolbox.register("mate", tools.cxUniformPartialyMatched,indpb=0.3)
@@ -85,15 +85,22 @@ def call_GA(data,nb_cluster=3,ml_cons=[],cl_cons=[]):
 
     def main():
         pop = toolbox.population(n=POP_SIZE) #set population size here
-        CXPB, MUTPB, NGEN = 0.5, 0.7, 1000
+        CXPB, MUTPB, NGEN = 0.8, 0.8, 10000
         #even number that is about half the population:
         HALF_SIZE=POP_SIZE//2 if POP_SIZE//2 % 2 == 0  else (POP_SIZE//2) + 1
+        #HALF_SIZE=POP_SIZE-(POP_SIZE//4 if POP_SIZE//4 % 2 == 0  else (POP_SIZE//4) + (4-POP_SIZE%4))
 
         # Evaluate the entire population
         fitnesses = map(toolbox.evaluate, pop)
         for ind, fit in zip(pop, fitnesses):
             ind.fitness.values = fit
 
+
+        maxfitness = tools.selBest(pop, k=1)[0].fitness.values[0]
+
+        score_evo=[]
+        tstart = time.time()
+        tfin=tstart
         for g in range(NGEN):
             # Select the next generation individuals
             offspring = toolbox.select(pop,HALF_SIZE)
@@ -109,7 +116,7 @@ def call_GA(data,nb_cluster=3,ml_cons=[],cl_cons=[]):
 
             for mutant in offspring:
                 if random.random() < MUTPB:
-                    toolbox.mutate(mutant,indpb = 0.05)
+                    toolbox.mutate(mutant,indpb = max(0.05,1/(g+1)))
                     del mutant.fitness.values
 
             # Evaluate the individuals with an invalid fitness
@@ -119,7 +126,6 @@ def call_GA(data,nb_cluster=3,ml_cons=[],cl_cons=[]):
                 ind.fitness.values = fit
 
             # The population is partialy replaced by the offspring
-            #pop[:] = offspring
             pop=tools.selBest(pop, k=POP_SIZE-HALF_SIZE) + offspring
 
 
@@ -138,17 +144,24 @@ def call_GA(data,nb_cluster=3,ml_cons=[],cl_cons=[]):
 
             if g % 20 == 0:
                 chicken_dinner=tools.selBest(pop, k=1)
-                print("Gen {} | rules broken : {}  | score {} ".format(g,nb_broken_rules(chicken_dinner[0]),chicken_dinner[0].fitness))
-            if False:
-                plt.figure()
-                plt.scatter(data[:,0], data[:,1], c = chicken_dinner[0])
-                #blocks process
-                plt.draw()
-        return pop
+                #print("Gen {} | rules broken : {}  | score {} ".format(g,nb_broken_rules(chicken_dinner[0]),chicken_dinner[0].fitness))
+            s = tools.selBest(pop, k=1)[0].fitness.values[0]
+            score_evo+=[s]
+            if s < maxfitness:
+                maxfitness=s
+                print(maxfitness)
+                tfin=time.time()-tstart
 
-    tstart = time.time()
-    endpop = main()
-    tfin=time.time()-tstart
+        return tfin,pop,score_evo
+
+    tfin,endpop,se = main()
+
+    plt.figure()
+    plt.title("Score evolution")
+    plt.plot(se)
+    #blocks process
+    plt.draw()
+
     chicken_dinner=tools.selBest(endpop, k=1)[0]
     #dégroupage des points
     colors=np.zeros(len(data))
@@ -162,7 +175,7 @@ def call_GA(data,nb_cluster=3,ml_cons=[],cl_cons=[]):
 
 #PREPROCESSING
 #Data ( import real data for bechmark)
-datasize = 30
+datasize = 100
 data = datasets.make_blobs(n_samples=datasize, centers= 3 ,random_state=8)[0]
 
 Dists = pairwise_distances(data)
@@ -171,7 +184,7 @@ cl_cons=[(1,7),(12,29),(17,20)]
 #ml_cons=[]
 #cl_cons=[]
 
-colors,best_score,tt = call_GA(data,3,ml_cons,cl_cons)
+colors,best_score,tt = call_GA(data,3)
 
 plt.figure()
 plt.title("Attribution, score {} | temps {}".format(best_score,tt))
