@@ -15,6 +15,7 @@ from pb_generation import create_pb
 from  sklearn.datasets import make_moons, make_blobs
 #from Deap_GA import call_GA
 
+from maxD import model2
 
 def k_means(data,ml,cl,k):
     return 1,[]
@@ -40,7 +41,7 @@ cl.append(pb[2])
 
 
 k=5
-function = [run_cop_kmeans,PLNE,CSP,ge]
+function = [run_cop_kmeans,model2,CSP,ge]
 def run():
     pas_data=len(data)
     pas_contrainte=len(ml)
