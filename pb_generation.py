@@ -87,3 +87,4 @@ def create_cl_cons(labels, labels_groups, cons):
             while not not linked_pt[key]:
                 labels_groups[labels[key]].add(linked_pt[key].pop())
     return new_cons
+
