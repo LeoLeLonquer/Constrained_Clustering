@@ -21,6 +21,7 @@ def create_pb(pb_size, ml_cond, cl_cond, pb_fun, seed=1):
     labels_groups = create_label_groups(labels)
     must_link = create_ml_cons(labels, labels_groups, ml_cond)
     cannot_link = create_cl_cons(labels, labels_groups, cl_cond)
+
     return data, must_link, cannot_link
 
 
@@ -72,6 +73,8 @@ def create_cl_cons(labels, labels_groups, cons):
 
         for co in range(1, cos + 1):
             kluster_to_co = np.random.randint(min_kluster, max_kluster)
+            while labels[pt] == kluster_to_co:
+                kluster_to_co = np.random.randint(min_kluster, max_kluster)
             if len(labels_groups[kluster_to_co]) > 1:
                 pt_to_co = labels_groups[kluster_to_co].pop()
                 while pt_to_co == co :
