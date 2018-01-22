@@ -85,7 +85,7 @@ def call_GA(data,ml_cons=[],cl_cons=[],nb_cluster=3):
 
     def main():
         pop = toolbox.population(n=POP_SIZE) #set population size here
-        CXPB, MUTPB, NGEN = 0.8, 0.8, 10000
+        CXPB, MUTPB, NGEN = 0.8, 0.8, 200
         #even number that is about half the population:
         HALF_SIZE=POP_SIZE//2 if POP_SIZE//2 % 2 == 0  else (POP_SIZE//2) + 1
         #HALF_SIZE=POP_SIZE-(POP_SIZE//4 if POP_SIZE//4 % 2 == 0  else (POP_SIZE//4) + (4-POP_SIZE%4))

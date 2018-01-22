@@ -73,7 +73,7 @@ def cons_linking(cons):
     return list(dico.values())
 
 # Start to modelize
-def model2(data, nb_cluster, ml_cons, cl_cons):
+def PLNE(data, nb_cluster, ml_cons, cl_cons):
     distance_matrix = pairwise_distances(data) # D[i,j] is the distance between i and j
     flat_dist = distance_matrix.flatten()
     pb = model.Model('Minimizing max diameter 2')
