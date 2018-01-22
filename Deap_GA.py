@@ -10,11 +10,10 @@ from sklearn import datasets
 
 import propagation
 
-def call_GA(data,ml_cons,cl_cons):
+def call_GA(data,nb_cluster=3,ml_cons=[],cl_cons=[]):
     Dico_fortement_connexe,cl_rules=propagation.propagate(len(data), ml_cons, cl_cons)
     IND_SIZE = len(Dico_fortement_connexe) # Number of connex sets
     POP_SIZE = 100
-    nb_cluster = 3 # ! try to bad score when not right number of cluster clusters
 
 
     #Create score
@@ -172,7 +171,7 @@ cl_cons=[(1,7),(12,29),(17,20)]
 #ml_cons=[]
 #cl_cons=[]
 
-colors,best_score,tt = call_GA(data,ml_cons,cl_cons)
+colors,best_score,tt = call_GA(data,3,ml_cons,cl_cons)
 
 plt.figure()
 plt.title("Attribution, score {} | temps {}".format(best_score,tt))
