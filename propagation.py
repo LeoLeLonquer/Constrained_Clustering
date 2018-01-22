@@ -73,8 +73,5 @@ def propagate(number_of_points, ml_cons, cl_cons):
         new_cl_cons[ml_labels[pt1]].add(ml_labels[pt2])
         new_cl_cons[ml_labels[pt2]].add(ml_labels[pt1])
 
-    print(ml_cons)
-    print(cl_cons)
-    print([(ordered_ml_groups[ml_labels[pt1]], ordered_ml_groups[ml_labels[pt2]]) for pt1, pt2 in cl_cons])
     return ordered_ml_groups, new_cl_cons
 
