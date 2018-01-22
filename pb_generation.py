@@ -21,7 +21,6 @@ def create_pb(pb_size, ml_cond, cl_cond, pb_fun, seed=1):
     labels_groups = create_label_groups(labels)
     must_link = create_ml_cons(labels, labels_groups, ml_cond)
     cannot_link = create_cl_cons(labels, labels_groups, cl_cond)
-
     return data, must_link, cannot_link
 
 

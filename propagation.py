@@ -42,7 +42,10 @@ def clean(n_points, cons):
     return new_cons
 
 def propagate(number_of_points, ml_cons, cl_cons):
-
+    """ returns :
+        - ordered_ml_groups a tab where index == label => group of points
+        - new_cl_cons a dic where label => set of label
+    """
     ml_cons = clean(number_of_points, ml_cons)
     cl_cons = clean(number_of_points, cl_cons)
 
