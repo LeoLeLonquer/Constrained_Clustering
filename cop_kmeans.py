@@ -238,6 +238,10 @@ def max_D_all_cluster(data,label,k):
             point = points
     return distance_max,point,[cluster_dis_max,cluster_dis_max]
 
+def get_score(data,label,k):
+    distance,_,_=max_D_all_cluster(data,label,k)
+    return distance
+
 def min_D_between_cluster(data,label):
     dis_min=10000000000
     point = []
