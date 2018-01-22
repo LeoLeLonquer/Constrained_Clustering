@@ -10,13 +10,14 @@ Created on Mon Jan 22 19:44:57 2018
 import random
 
 import matplotlib.pyplot as plt
-
+import numpy as np
 import sys
 import argparse
 
 def cop_kmeans(dataset, k, ml=[], cl=[], 
                initialization='kmpp', 
                max_iter=300, tol=1e-4):
+    
     ml, cl = transitive_closure(ml, cl, len(dataset))
     ml_info = get_ml_info(ml, dataset)
     tol = tolerance(tol, dataset)
@@ -239,8 +240,9 @@ def max_D_all_cluster(data,label,k):
     return distance_max,point,[cluster_dis_max,cluster_dis_max]
 
 def get_score(data,label,k):
-    distance,_,_=max_D_all_cluster(data,label,k)
-    return distance
+    distance,point,_=max_D_all_cluster(data,label,k)
+    print(point)
+    return np.sqrt(distance)
 
 def min_D_between_cluster(data,label):
     dis_min=10000000000
@@ -282,6 +284,7 @@ def rand_score(res , label):
 import time
 # plot_data=[[x,y] for x,y in zip(a,b)]
 def run_cop_kmeans (data,ml,nl,k):
+    print("run cop kmeans")
     start = time.time()
     best_clusters = None
     best_score = None    
@@ -290,7 +293,6 @@ def run_cop_kmeans (data,ml,nl,k):
     #         score = sum(l2_distance(data[j], centers[clusters[j]]) 
     #                     for j in range(len(data)))
         score,_,_ =calcule_score('D',data,clusters,k) 
-        print("score = {}".format(score))
         if best_score is None or score > best_score:
             best_score = score
             best_clusters = clusters
@@ -299,7 +301,6 @@ def run_cop_kmeans (data,ml,nl,k):
     t = time.time()-start
     color = ['b', 'r', 'r', 'c', 'm', 'y', 'k']
     
-    print (best_center)
     for  i in range(k):
         index =  [x for x,y in enumerate(best_clusters) if y==i]
         plt.scatter([data[x][0] for x in index],[data[y][1] for y in index],color=color[i],marker = '.')

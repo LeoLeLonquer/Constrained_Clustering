@@ -73,7 +73,7 @@ def cons_linking(cons):
     return list(dico.values())
 
 # Start to modelize
-def model2(data, nb_cluster, ml_cons, cl_cons):
+def model2(data, ml_cons, cl_cons, nb_cluster):
     distance_matrix = pairwise_distances(data) # D[i,j] is the distance between i and j
     flat_dist = distance_matrix.flatten()
     pb = model.Model('Minimizing max diameter 2')
@@ -133,7 +133,7 @@ def model2(data, nb_cluster, ml_cons, cl_cons):
                     colors[l] = k
         score = sol.get_value(maxD)
         out = (colors, score, duration)
-    return out
+    return duration,colors
     # if sol == None:
         # print("No solution found")
     # else:
