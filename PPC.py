@@ -1,11 +1,11 @@
-from config import setup
-setup()
 
 
 import matplotlib.pyplot as plt
 from sklearn.datasets import make_blobs
 from sklearn.metrics.pairwise import pairwise_distances
 
+# from config import setup
+# setup()
 
 from docplex.cp.model import CpoModel
 

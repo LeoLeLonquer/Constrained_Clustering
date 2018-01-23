@@ -164,6 +164,8 @@ def call_GA(data,ml_cons=[],cl_cons=[],nb_cluster=3):
     plt.draw()
 
     chicken_dinner=tools.selBest(endpop, k=1)[0]
+    print("==============================", chicken_dinner.fitness.values[0],
+            nb_broken_rules(chicken_dinner))
     #dégroupage des points
     colors=np.zeros(len(data))
     for i in range(IND_SIZE):
