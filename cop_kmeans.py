@@ -54,8 +54,6 @@ def cop_kmeans(dataset, k, ml=[], cl=[],
     return clusters_, centers_
 
 
-
-
 def l2_distance(point1, point2):
     return sum([(float(i)-float(j))**2 for (i, j) in zip(point1, point2)])
 
@@ -172,6 +170,7 @@ def get_ml_info(ml, dataset):
     
     return groups, scores, centroids
 
+# cree les ensembles de ml cl
 def transitive_closure(ml, cl, n):
     ml_graph = dict()
     cl_graph = dict()
@@ -216,6 +215,7 @@ def transitive_closure(ml, cl, n):
                 raise Exception('inconsistent constraints between %d and %d' %(i, j))
     return ml_graph, cl_graph
     
+# pour calculer le score D
 def max_D_one_cluster(data,label) :
     dis_max=0
     point = []
@@ -244,6 +244,7 @@ def get_score(data,label,k):
     print(point)
     return np.sqrt(distance)
 
+# score S
 def min_D_between_cluster(data,label):
     dis_min=10000000000
     point = []
@@ -280,18 +281,16 @@ def rand_score(res , label):
                 b+=1
     
     return 2*(a+b)/(n*(n-1))
-### import matplotlib.pyplot as plt
+
 import time
-# plot_data=[[x,y] for x,y in zip(a,b)]
+
 def run_cop_kmeans (data,ml,nl,k):
-    print("run cop kmeans")
+    #print("run cop kmeans")
     start = time.time()
     best_clusters = None
     best_score = None    
     for i in range(10):
         clusters, centers = cop_kmeans(data, k,ml,nl, max_iter=10,tol=0.1)
-    #         score = sum(l2_distance(data[j], centers[clusters[j]]) 
-    #                     for j in range(len(data)))
         score,_,_ =calcule_score('D',data,clusters,k) 
         if best_score is None or score > best_score:
             best_score = score
@@ -304,7 +303,5 @@ def run_cop_kmeans (data,ml,nl,k):
     for  i in range(k):
         index =  [x for x,y in enumerate(best_clusters) if y==i]
         plt.scatter([data[x][0] for x in index],[data[y][1] for y in index],color=color[i],marker = '.')
-    # plt.scatter([data[x][0] for x in index],[data[y][1] for y in index],color=color[i],marker = '.')
-    # plt.show()
     return t,best_clusters
     
