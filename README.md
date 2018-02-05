@@ -2,7 +2,9 @@
 
 Greetings,
 
-Main pieces of codes for :
+Report : goo.gl/QFziCz
+
+Main pieces of codes location :
 - GA : Deap_GA.py
 - PPC : PPQ/PPC.ipynb
 - PLNE : PLNE.py
