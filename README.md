@@ -6,7 +6,7 @@ Report : goo.gl/QFziCz
 
 Main pieces of codes location :
 - GA : Deap_GA.py
-- PPC : PPQ/PPC.ipynb
+- PPC : PPC.ipynb
 - PLNE : PLNE.py
 - Cop K-Means : cop-kmeans.py
 
