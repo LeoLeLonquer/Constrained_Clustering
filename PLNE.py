@@ -22,7 +22,7 @@ import propagation
 # Is it better to preprocess the constraint
 # Or to add constraints
 # Or to do nothing ?
-                              # still work when [1,-1] is in eq_cons
+# still work when [1,-1] is in eq_cons
 #================================================================================
 # APPROACH 1
 

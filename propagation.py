@@ -2,7 +2,6 @@ import collections
 
 def must_link_fusion(cons, out_type=None):
     ml_groups = collections.defaultdict(set) # pt => list of pts
-    # linked = collections.defaultdict(set) # nb => list of pt
     ml_labels = dict() # pt => nb
     for pt1, pt2 in cons:
         ml_groups[pt1].add(pt2)
@@ -29,7 +28,7 @@ def must_link_fusion(cons, out_type=None):
     return out, ml_labels
 
 def clean(n_points, cons):
-    """ converts link btw 1 and -1 to 1 and n_points-1"""
+    """ converts links btw 1 and -1 to 1 and n_points-1"""
     cons_to_modify = filter(lambda pts: pts[0] < 0 or pts[1] < 0, cons)
     new_cons = list(filter(lambda pts: pts[0] >= 0 and pts[1] >= 0, cons))
 

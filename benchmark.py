@@ -57,6 +57,7 @@ function = [run_cop_kmeans,PLNE,call_CSP,call_GA]
 
 
 print(FORMAT.format("data_len", "percentage_cons", "function", "time", "score", "truthness"))
+
 def run():
     lendata = len(data)
     lenper = len(percentages)

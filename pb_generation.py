@@ -7,14 +7,14 @@ from  sklearn.datasets import make_moons, make_blobs
 # KMeans
 
 
-PB_SIZES = [10, 100, 10**3, 10**4, 10**5, 10**6]
+# PB_SIZES = [10, 100, 10**3, 10**4, 10**5, 10**6]
 # MUST_LINK AND CANNOT_LINK CONSTRAINT DESCR :
 # element : (pourcentage of pts to connect,
 #           range of connection per point)
-MUST_LINK = [(0, [0,0]), (1,[1,2]), (10, [1,5]),(50, [1,10]),(100,[1,20])]
-CANNOT_LINK = [(0, [0,0]), (1,[1,2]), (10, [1,5]),(50, [1,10]),(100,[1,20])]
-PB_FUNCTION = [make_moons, make_blobs]
-SEED = [1,2,3]
+# MUST_LINK = [(0, [0,0]), (1,[1,2]), (10, [1,5]),(50, [1,10]),(100,[1,20])]
+# CANNOT_LINK = [(0, [0,0]), (1,[1,2]), (10, [1,5]),(50, [1,10]),(100,[1,20])]
+# PB_FUNCTION = [make_moons, make_blobs]
+# SEED = [1,2,3]
 
 def create_pb(pb_size, ml_cond, cl_cond, pb_fun, seed=1):
     data, labels = pb_fun(n_samples=pb_size, random_state=seed)
