@@ -14,11 +14,11 @@ def call_GA(data,ml_cons=[],cl_cons=[],nb_cluster=3):
     Dico_fortement_connexe,cl_rules=propagation.propagate(len(data), ml_cons, cl_cons)
     IND_SIZE = len(Dico_fortement_connexe) # Number of connex sets
     POP_SIZE = 100
-    
+
     Dists = pairwise_distances(data)
 
     #Create score
-    creator.create("FitnessDS", base.Fitness, weights=(-1.0,1.0))
+    creator.create("FitnessDS", base.Fitness, weights=(-1.0,1.0)) #minimize D, maximize S
     creator.create("Individual", list, fitness=creator.FitnessDS)
 
     #Defining population
@@ -34,7 +34,7 @@ def call_GA(data,ml_cons=[],cl_cons=[],nb_cluster=3):
             for j in range(i,len(individual)):
                 if i in cl_rules and j in cl_rules[i] and individual[i]==individual[j]:
                     broken_rules += 1
-        return broken_rules # rules appear twice
+        return broken_rules # 1 wrong association can cause multible broken rules
 
     def evaluate(individual):
         #Diameter score: greatest distance beetween two items of the same cluster(to mnimize)
@@ -57,6 +57,7 @@ def call_GA(data,ml_cons=[],cl_cons=[],nb_cluster=3):
                     if dist > D:
                         D = dist
                 """
+                #Calculates S score
                 #check in other set for Inter cluster dist
                 for k2 in range(1,nb_cluster+1):
                     if k2 != k:
@@ -74,8 +75,8 @@ def call_GA(data,ml_cons=[],cl_cons=[],nb_cluster=3):
         return D * malus,0,
 
 
-    #toolbox.register("mate", tools.cxUniformPartialyMatched,indpb=0.3)
-    toolbox.register("mate", tools.cxTwoPoint)
+    toolbox.register("mate", tools.cxUniformPartialyMatched,indpb=0.5)
+    #toolbox.register("mate", tools.cxTwoPoint)
     toolbox.register("mutate", tools.mutUniformInt,low=1,up=nb_cluster)
     #toolbox.register("select", tools.selTournament, tournsize=3)
     toolbox.register("select", tools.selRoulette)
@@ -86,7 +87,7 @@ def call_GA(data,ml_cons=[],cl_cons=[],nb_cluster=3):
 
     def main():
         pop = toolbox.population(n=POP_SIZE) #set population size here
-        CXPB, MUTPB, NGEN = 0.8, 0.8, 200
+        CXPB, MUTPB, NGEN = 0.8, 0.8, 100
         #even number that is about half the population:
         HALF_SIZE=POP_SIZE//2 if POP_SIZE//2 % 2 == 0  else (POP_SIZE//2) + 1
         #HALF_SIZE=POP_SIZE-(POP_SIZE//4 if POP_SIZE//4 % 2 == 0  else (POP_SIZE//4) + (4-POP_SIZE%4))
@@ -146,7 +147,7 @@ def call_GA(data,ml_cons=[],cl_cons=[],nb_cluster=3):
             if g % 20 == 0:
                 chicken_dinner=tools.selBest(pop, k=1)
                 #print("Gen {} | rules broken : {}  | score {} ".format(g,nb_broken_rules(chicken_dinner[0]),chicken_dinner[0].fitness))
-            s = tools.selBest(pop, k=1)[0].fitness.values[0]
+            s = tools.selBest(pop, k=1)[0].fitness.values[0] #doesn't check if individual is valid
             score_evo+=[s]
             if s < maxfitness:
                 maxfitness=s
@@ -171,4 +172,17 @@ def call_GA(data,ml_cons=[],cl_cons=[],nb_cluster=3):
     for i in range(IND_SIZE):
         for j in Dico_fortement_connexe[i]:
             colors[j]=chicken_dinner[i]
-    return tfin, colors
+    print(colors)
+    return colors,chicken_dinner.fitness,tfin
+
+
+datasize = 100
+data = datasets.make_blobs(n_samples=datasize, centers= 3 ,random_state=8)[0]
+
+Dists = pairwise_distances(data)
+ml_cons=[(1,2),(13,11),(11,22)]
+cl_cons=[(1,7),(12,29),(17,20)]
+#ml_cons=[]
+#cl_cons=[]
+
+colors,best_score,tt = call_GA(data,ml_cons,cl_cons,3)

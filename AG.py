@@ -1,3 +1,4 @@
+#FIrst try at a GA for clustering. See Deap_GA.py for the GA using the Deap framework.
 print("AG version 1.0")
 
 import random as r
@@ -29,14 +30,14 @@ datasize = 100
 fich_courant = getframeinfo(currentframe()).filename
 rep_courant = Path(fich_courant).resolve().parent
 
-def creer_donnees() : 
- 
+def creer_donnees() :
+
     dat = {}
     dat["2blobs"] = {}
     dat["2blobs"]["data"], dat["2blobs"]["labels"] = datasets.make_blobs(n_samples=datasize, centers=2 ,random_state=8)
     # dat["2blobs"]["mustlink"] =
     # dat["2blobs"]["cannotlink"] =
-    
+
     dat["3blobs"] = {}
     dat["3blobs"]["data"], dat["3blobs"]["labels"] = datasets.make_blobs(n_samples=datasize, centers=3 ,random_state=8)
     # dat["3blobs"]["mustlink"] =
@@ -54,13 +55,13 @@ def creer_donnees() :
 
 # écriture de données dans un fichier
 def ecriture(donnees, nom_fichier):
-    with open(str(rep_courant) + "/" + str(nom_fichier),"wb") as fichier : 
+    with open(str(rep_courant) + "/" + str(nom_fichier),"wb") as fichier :
         pick = pickle.Pickler(fichier)
         pick.dump(donnees)
-            
+
 # lecture des donnees depuis le chemin indiqué
 def lecture(nom_fichier):
-    with open(str(rep_courant) + "/" + str(nom_fichier),"rb") as fichier : 
+    with open(str(rep_courant) + "/" + str(nom_fichier),"rb") as fichier :
         depick = pickle.Unpickler(fichier)
         dat = depick.load()
     return dat
@@ -104,7 +105,7 @@ def plot_best_solution(data, pop, title = "Pensez à mettre un titre ;)"):
 # data = datasets.make_circles(n_samples=datasize, factor=.5,noise=.05)[0]
 
 
-# Génération de datasets 
+# Génération de datasets
 # data, targets = datasets.make_moons(n_samples=datasize, noise=.05)
 # calcul des distances entre les points
 dists = [[ distance.euclidean(data[i],data[j]) for i in range(len(data))]for j in range(len(data))]
@@ -122,7 +123,7 @@ def make_dic(data,D):
         Dict[i] = sorted(ld, key=lambda p: p[1])[:nbvoisins]
     return Dict
 
-# précalcul des plus proches voisins de chaque point 
+# précalcul des plus proches voisins de chaque point
 Dict = make_dic(data,dists)
 
 # print(Dict[0])
@@ -134,7 +135,7 @@ Dict = make_dic(data,dists)
 #blobs = datasets.make_blobs(n_samples=datasize, random_state=8)
 #no_structure = np.random.rand(datasize, 2), None
 
-# génération aléatoire de centoïdes et d'affectations 
+# génération aléatoire de centoïdes et d'affectations
 Centroids = [data[r.randint(0,datasize-1)] for i in range(3) ]
 labels= [r.randint(0,3) for i in range(datasize)]
 
@@ -142,7 +143,7 @@ labels= [r.randint(0,3) for i in range(datasize)]
 k=2
 
 # initialises a population without scores (aléatoirement)
-def init_pop(n): 
+def init_pop(n):
     pop=[]
     for i in range(n):
         pop += [[r.randint(1,k) for i in range(datasize)]] # AN individual is a list of affectations to clusters
@@ -160,7 +161,7 @@ def moyenne_voisins(pop):
 
 
 # sets scores for individuals
-def score(pop): 
+def score(pop):
     # définition de la fitness
     def fit(ind):
         # return sc(data, ind) if len(set(ind)) > 1 else -1
@@ -179,7 +180,7 @@ def score(pop):
 def distmin_inter_cluster(pop):
 
     distmin = -1
-    
+
     # pour chaque affectation
     for i in range(len(pop)) :
         for j in range(len(pop)) :
@@ -187,8 +188,8 @@ def distmin_inter_cluster(pop):
             if pop[i] != pop[j] :
                 # si la distance i-j est inférieure au min du cluster ou n'est pas initialisée
                 if dists[i][j] < distmin or distmin < 0 :
-                    distmin = dists[i][j]        
-      
+                    distmin = dists[i][j]
+
     return distmin
 
 
@@ -209,7 +210,7 @@ def select(pop,n):#Selects individual for reproduction (roulette)
     return pop_sorted[:n]
 
 # Select individuals to repopulate (la fonction KILL, on tue "child" fois)
-def select2(pop, child): 
+def select2(pop, child):
     pop_sorted = sorted(pop, key=lambda d: d['s'],reverse=True)
     return pop_sorted[:(len(pop)-len(child))] + child
 
@@ -224,7 +225,7 @@ def crossover(pop):
         childs+= cross(pop[i],pop[i+1])
     return childs
 
-# Mutates a population (apport de nouveaux allèles) 
+# Mutates a population (apport de nouveaux allèles)
 def mutate(pop,mute_rate): #mutates a population (if an ind passes the mute rate test, we chose an arb number of affect to mutate)
     popm=pop
     ind_size=len(pop[0])
@@ -259,7 +260,7 @@ while gen < 1000:
         plot_best_solution(data,pop,"Gen : " + str(gen) + "  Score : " + str(big_boss_score) )#plots the best in the population
 
     # on séléctionne les géniteurs
-    reprod = select(pop,pop_size//2) 
+    reprod = select(pop,pop_size//2)
 
 	# on génére une progéniture en croisant les géniteurs
     offspring = crossover(reprod)
@@ -270,7 +271,7 @@ while gen < 1000:
 	# scoring des mutants nouveaux nés (on nait sans score)
     offspring3 = score(offspring2)
 
-	# on enlève les moins bons de la population 
+	# on enlève les moins bons de la population
     pop = select2(pop,offspring3)
 
     gen+=1
