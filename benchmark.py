@@ -15,7 +15,7 @@ from pb_generation import create_pb
 from  sklearn.datasets import make_moons, make_blobs
 from Deap_GA import call_GA
 from PPC import call_CSP
-from maxD import PLNE
+from PLNE import PLNE
 import csv
 import numpy as np
 
@@ -51,19 +51,10 @@ FORMAT ="{: >10};{: >10};{: >10};{: >10};{: >10};{: >10}"
 data = []
 ml=[]
 cl=[]
-
-# size_data = [20, 50, 100, 150, 200]
-# # percentages = [0, 30 , 60]
-# percentages = np.arange(0, 100, 10)
-# for a in size_data:
-    # for c in percentages:
-        # pb = create_pb(a, (c*a/100,[1,3]), (c*a/100,[1,3]), make_blobs, seed=1)
-        # data.append(pb[0])
-        # ml.append(pb[1])
-        # cl.append(pb[2])
-
-k=5
+k=2
 function = [run_cop_kmeans,PLNE,call_CSP,call_GA]
+
+
 
 print(FORMAT.format("data_len", "percentage_cons", "function", "time", "score", "truthness"))
 def run():
@@ -94,26 +85,37 @@ def run():
                 pass
     return res
 
-# with open("results.csv", 'w') as csvfile :
-    # writer = csv.writer(csvfile, delimiter=';')
-    # writer.writerow(["data_len", "percentage_cons", "function", "time", "score", "truthness"])
-    # res = run()
-
-
-size_data = [500, 1000, 2000]
+size_data = [20, 50, 100, 150, 200]
 # percentages = [0, 30 , 60]
-percentages = np.arange(0, 110, 10)
+percentages = np.arange(0, 100, 10)
+data_function = make_moons
 for a in size_data:
     for c in percentages:
-        pb = create_pb(a, (c*a/100,[0,2]), (c*a/100,[0,2]), make_blobs, seed=1)
+        pb = create_pb(a, (c*a/100,[1,3]), (c*a/100,[1,3]), make_moons, seed=1)
         data.append(pb[0])
         ml.append(pb[1])
         cl.append(pb[2])
 
-with open("results2.csv", 'w') as csvfile :
+with open("results_moons.csv", 'w') as csvfile :
     writer = csv.writer(csvfile, delimiter=';')
     writer.writerow(["data_len", "percentage_cons", "function", "time", "score", "truthness"])
     res = run()
+
+
+# size_data = [500, 1000, 2000]
+# # percentages = [0, 30 , 60]
+# percentages = np.arange(0, 110, 10)
+# for a in size_data:
+    # for c in percentages:
+        # pb = create_pb(a, (c*a/100,[0,2]), (c*a/100,[0,2]), make_blobs, seed=1)
+        # data.append(pb[0])
+        # ml.append(pb[1])
+        # cl.append(pb[2])
+
+# with open("results2.csv", 'w') as csvfile :
+    # writer = csv.writer(csvfile, delimiter=';')
+    # writer.writerow(["data_len", "percentage_cons", "function", "time", "score", "truthness"])
+    # res = run()
 
 plt.scatter([i for i in range(len(data))],[res[i][0][1][0] for i in range(len(data))],color='r',marker = '.')
 

@@ -10,7 +10,7 @@ import collections
 from itertools import combinations, product
 import propagation 
 
-# HERE WE ARE GONNA TRY TO MINIMIZE THE MAXIMUM DIAMETER BETWEEN CLUSTERS
+# HERE WE ARE GONNA TRY TO MINIMIZE THE MAXIMUM DIAMETER OF  CLUSTERS
 
 # Two differents ways to implement the pb
 # 1 : using y(i,j) where y(i,j)==1 iff i and j are in the same cluster
@@ -73,7 +73,7 @@ def cons_linking(cons):
     return list(dico.values())
 
 # Start to modelize
-def PLNE(data,  ml_cons, cl_cons,nb_cluster):
+def PLNE(data,  ml_cons, cl_cons, nb_cluster):
     distance_matrix = pairwise_distances(data) # D[i,j] is the distance between i and j
     flat_dist = distance_matrix.flatten()
     pb = model.Model('Minimizing max diameter 2')
@@ -81,7 +81,6 @@ def PLNE(data,  ml_cons, cl_cons,nb_cluster):
     # Adapting the variables to the current one
     n_samples = len(data)
     Klusters = nb_cluster
-    cl_conss = cl_cons
 
     # Defining the global problem
     pb = model.Model('Minimizing max diameter')

@@ -38,7 +38,7 @@ def create_ml_cons(labels, labels_groups, cons):
     new_cons = []
 
     while nb_co > 0 : # add a cond if no possibility to link
-        cos = np.random.randint(min_co, max_co)
+        cos = np.random.randint(min_co, max_co + 1)
         pt = np.random.randint(0, nb_points)
         linked_pt = set({})
         cos_bis = 0
@@ -65,15 +65,15 @@ def create_cl_cons(labels, labels_groups, cons):
     min_kluster, max_kluster = min(labels), max(labels)
 
     while nb_co > 0 : # add a cond if no possibility to link
-        cos = np.random.randint(min_co, max_co)
+        cos = np.random.randint(min_co, max_co + 1)
         pt = np.random.randint(0, nb_points)
         linked_pt = collections.defaultdict(set)
         cos_bis = 0
 
         for co in range(1, cos + 1):
-            kluster_to_co = np.random.randint(min_kluster, max_kluster)
+            kluster_to_co = np.random.randint(min_kluster, max_kluster + 1)
             while labels[pt] == kluster_to_co:
-                kluster_to_co = np.random.randint(min_kluster, max_kluster)
+                kluster_to_co = np.random.randint(min_kluster, max_kluster + 1)
             if len(labels_groups[kluster_to_co]) > 1:
                 pt_to_co = labels_groups[kluster_to_co].pop()
                 while pt_to_co == co :
